@@ -16,7 +16,7 @@ public interface ReviewService {
     /**
      * Редактирование отзыва овтором
      */
-    ReviewFullOutDto patch(Long userId, ReviewPatchDto reviewPatchDto);
+    ReviewFullOutDto patch(Long userId, Long reviewId, ReviewPatchDto reviewPatchDto);
     /**
      * Получить отзыв по Id
      */
@@ -24,7 +24,7 @@ public interface ReviewService {
     /**
      * Получить отзывы по Id события
      */
-    List<ReviewOutDto> findReviewByEventId(Long EventId, PageRequest pageRequest);
+    List<ReviewOutDto> findReviewByEventId(Long eventId, PageRequest pageRequest);
     /**
      * Удалить отзыв по Id автором
      */

@@ -38,11 +38,12 @@ public class ReviewController {
         return reviewFullOutDto;
     }
 
-    @PatchMapping
+    @PatchMapping("/{reviewId}")
     @Operation(description = "Изменение отзыва о событии")
-    ReviewFullOutDto patchReview(@RequestHeader @Positive long userId,
+    ReviewFullOutDto patchReview(@PathVariable @Positive long reviewId,
+                                 @RequestHeader @Positive long userId,
                                  @RequestBody @Valid ReviewPatchDto reviewPatchDto) {
-        ReviewFullOutDto reviewFullOutDto = service.patch(userId, reviewPatchDto);
+        ReviewFullOutDto reviewFullOutDto = service.patch(userId, reviewId, reviewPatchDto);
         log.info("Данные по отзыву с Id {} обновлены", reviewFullOutDto.getId());
         return reviewFullOutDto;
     }
@@ -59,10 +60,10 @@ public class ReviewController {
     @Operation(description = "Получение списка всех отзывов о событии")
     List<ReviewOutDto> getAllUser(@RequestParam(defaultValue = "0", required = false) int from,
                                   @RequestParam(defaultValue = "10", required = false) int size,
-                                  @PathVariable @Positive long id) {
-        List<ReviewOutDto> list = service.findReviewByEventId(id,
+                                  @RequestParam @Positive long eventId) {
+        List<ReviewOutDto> list = service.findReviewByEventId(eventId,
                 PageRequest.of(from / size, size));
-        log.info("Получен список отзывов о событии с id= {}", id);
+        log.info("Получен список отзывов о событии с id= {}", eventId);
         return list;
     }
 

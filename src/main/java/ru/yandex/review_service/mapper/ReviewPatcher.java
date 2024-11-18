@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Component
 public class ReviewPatcher {
-    Review patch(Review review, ReviewPatchDto dto){
+    public Review patch(Review review, ReviewPatchDto dto){
         Review newReview = Review.builder()
                 .id(review.getId())
                 .authorId(review.getAuthorId())
