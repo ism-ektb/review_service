@@ -19,10 +19,11 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "author_id")
     private Long authorId;
     private String username;
     private String title;
-    @Column(name = "content_txt")
+    @Column(name = "content_text")
     private String content;
     @Column(name = "create_time")
     @Builder.Default()
@@ -30,5 +31,6 @@ public class Review {
     @Column(name = "update_time")
     private LocalDateTime updatedDateTime;
     private Long mark;
+    @Column(name = "event_id")
     private Long eventId;
 }

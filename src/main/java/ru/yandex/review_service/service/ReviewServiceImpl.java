@@ -83,6 +83,12 @@ public class ReviewServiceImpl implements ReviewService{
      */
     @Override
     public void deleteReview(Long userId, Long reviewId) {
-
+        Review review = repository.findById(reviewId).orElseThrow(()  -> new NoFoundObjectException(
+                String.format("Отзыв с id=%s не найден", reviewId)));
+        if (review.getAuthorId() != userId){
+            throw new BaseRelationshipException(
+                    String.format("Пользователь с id = %s не может удалить отзыв с id= %s", userId, reviewId));
+        }
+        repository.deleteById(reviewId);
     }
 }
