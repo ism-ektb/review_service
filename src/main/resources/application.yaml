@@ -1,0 +1,20 @@
+spring:
+  liquibase:
+    enabled: true
+  application:
+    name: review_service
+  sql:
+    init:
+      mode: never
+  datasource:
+    url: jdbc:postgresql://localhost:6542/review?createDatabaseIfNotExist=true
+    driverClassName: org.postgresql.Driver
+    username: review
+    password: review
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+
