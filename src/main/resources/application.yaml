@@ -7,10 +7,10 @@ spring:
     init:
       mode: never
   datasource:
-    url: jdbc:postgresql://localhost:6542/review?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/review?createDatabaseIfNotExist=true
     driverClassName: org.postgresql.Driver
-    username: review
-    password: review
+    username: postgres
+    password: iamroot
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
