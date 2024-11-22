@@ -10,11 +10,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.review_service.dto.StatisticsResponse;
+import ru.yandex.review_service.dto.TopReviewResponse;
 import ru.yandex.review_service.model.ReviewFullOutDto;
 import ru.yandex.review_service.model.ReviewInDto;
 import ru.yandex.review_service.model.ReviewOutDto;
 import ru.yandex.review_service.model.ReviewPatchDto;
 import ru.yandex.review_service.service.ReviewService;
+import ru.yandex.review_service.service.StatisticsService;
 
 import java.util.List;
 
@@ -27,6 +30,7 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewService service;
+    private final StatisticsService statisticsService;
 
     @PostMapping
     @Operation(description = "Создание нового отзыва")
@@ -73,5 +77,20 @@ public class ReviewController {
                     @PathVariable @Positive long id) {
         service.deleteReview(userId, id);
         log.info("отзыв с id = {} удален", id);
+    }
+
+    @GetMapping("/statistics/event/{id}")
+    StatisticsResponse getStatisticsEvent(@PathVariable Long id) {
+        return statisticsService.getStatisticsEvent(id);
+    }
+
+    @GetMapping("/statistics/author/{id}")
+    StatisticsResponse getStatisticsAuthor(@PathVariable Long id) {
+        return statisticsService.getStatisticsAuthor(id);
+    }
+
+    @GetMapping("/statistics/general/event/{id}")
+    TopReviewResponse getTopOfBestAndWorstEvent(@PathVariable Long id) {
+        return statisticsService.getTopOfBestAndWorstEvent(id);
     }
 }
