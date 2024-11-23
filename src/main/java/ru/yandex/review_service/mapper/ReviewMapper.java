@@ -9,6 +9,6 @@ import ru.yandex.review_service.model.ReviewOutDto;
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
     Review dtoToModel(ReviewInDto reviewInDto);
-    ReviewFullOutDto modelToFullDto(Review review);
-    ReviewOutDto modelToDto(Review review);
+//    ReviewFullOutDto modelToFullDto(Review review);
+//    ReviewOutDto modelToDto(Review review);
 }

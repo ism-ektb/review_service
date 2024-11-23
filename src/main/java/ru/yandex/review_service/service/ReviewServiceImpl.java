@@ -13,6 +13,7 @@ import ru.yandex.review_service.model.*;
 import ru.yandex.review_service.repository.ReviewRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +74,9 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<ReviewOutDto> findReviewByEventId(Long eventId, PageRequest pageRequest) {
 
-        return listMapper.modelsToDtos(repository.findAllByEventId(eventId, pageRequest));
+        return repository.findAllByEventId(eventId, pageRequest).stream()
+                .map(LikesMapper::toReviewOutDto)
+                .collect(Collectors.toList());
     }
 
     /**
