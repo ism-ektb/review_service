@@ -35,8 +35,8 @@ public class Review {
     private Long mark;
     @Column(name = "event_id")
     private Long eventId;
-    @OneToMany(mappedBy="review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Like> likes = new HashSet<>();
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Dislike> dislikes = new HashSet<>();
 }

@@ -32,7 +32,7 @@ public class ReviewServiceImpl implements ReviewService{
     public ReviewFullOutDto create(Long userId, ReviewInDto reviewInDto) {
         Review review = mapper.dtoToModel(reviewInDto);
         review.setAuthorId(userId);
-        return LikesMapper.toReviewFullOutDto(repository.save(review));
+        return mapper.modelToFullDto(repository.save(review));
     }
 
     /**
@@ -49,7 +49,7 @@ public class ReviewServiceImpl implements ReviewService{
                 String.format("Изменить отзыв с Id= %s пользователь с Id= %s не может", reviewId, userId)
         );
         review = patcher.patch(review, reviewPatchDto);
-        return LikesMapper.toReviewFullOutDto(repository.save(review));
+        return mapper.modelToFullDto(repository.save(review));
     }
 
     /**
@@ -61,7 +61,7 @@ public class ReviewServiceImpl implements ReviewService{
     public ReviewOutDto getReview(Long reviewId) {
         Review review = repository.findById(reviewId).orElseThrow(()  -> new NoFoundObjectException(
                 String.format("Отзыв с id=%s не найден", reviewId)));
-        return LikesMapper.toReviewOutDto(review);
+        return mapper.modelToDto(review);
     }
 
     /**

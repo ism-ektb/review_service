@@ -7,14 +7,12 @@ spring:
     init:
       mode: never
   datasource:
-    url: jdbc:postgresql://localhost:5432/review?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/review
     driverClassName: org.postgresql.Driver
-    username: postgres
-    password: iamroot
+    username: review
+    password: review
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
     show-sql: false
-
-

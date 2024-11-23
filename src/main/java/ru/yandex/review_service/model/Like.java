@@ -15,7 +15,7 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "review_id", nullable = false)
+    @JoinColumn(name = "review_id", referencedColumnName = "id", nullable = false)
     private Review review;
     @Column(name = "user_id", nullable = false)
     private Long userId;
