@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.yandex.review_service.exception.exception.BaseRelationshipException;
 import ru.yandex.review_service.exception.exception.NoFoundObjectException;
-import ru.yandex.review_service.mapper.LikesMapper;
 import ru.yandex.review_service.mapper.ReviewListMapper;
 import ru.yandex.review_service.mapper.ReviewMapper;
 import ru.yandex.review_service.mapper.ReviewPatcher;
@@ -13,7 +12,6 @@ import ru.yandex.review_service.model.*;
 import ru.yandex.review_service.repository.ReviewRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService{
     public ReviewFullOutDto create(Long userId, ReviewInDto reviewInDto) {
         Review review = mapper.dtoToModel(reviewInDto);
         review.setAuthorId(userId);
-        return LikesMapper.toReviewFullOutDto(repository.save(review));
+        return mapper.modelToFullDto(repository.save(review));
     }
 
     /**
@@ -50,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService{
                 String.format("Изменить отзыв с Id= %s пользователь с Id= %s не может", reviewId, userId)
         );
         review = patcher.patch(review, reviewPatchDto);
-        return LikesMapper.toReviewFullOutDto(repository.save(review));
+        return mapper.modelToFullDto(repository.save(review));
     }
 
     /**
@@ -62,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService{
     public ReviewOutDto getReview(Long reviewId) {
         Review review = repository.findById(reviewId).orElseThrow(()  -> new NoFoundObjectException(
                 String.format("Отзыв с id=%s не найден", reviewId)));
-        return LikesMapper.toReviewOutDto(review);
+        return mapper.modelToDto(review);
     }
 
     /**
@@ -74,9 +72,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<ReviewOutDto> findReviewByEventId(Long eventId, PageRequest pageRequest) {
 
-        return repository.findAllByEventId(eventId, pageRequest).stream()
-                .map(LikesMapper::toReviewOutDto)
-                .collect(Collectors.toList());
+        return listMapper.modelsToDtos(repository.findAllByEventId(eventId, pageRequest));
     }
 
     /**
