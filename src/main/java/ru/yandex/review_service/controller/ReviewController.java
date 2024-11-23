@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -14,19 +15,22 @@ import ru.yandex.review_service.model.ReviewFullOutDto;
 import ru.yandex.review_service.model.ReviewInDto;
 import ru.yandex.review_service.model.ReviewOutDto;
 import ru.yandex.review_service.model.ReviewPatchDto;
+import ru.yandex.review_service.service.LikesService;
 import ru.yandex.review_service.service.ReviewService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/reviews")
-@RequiredArgsConstructor
 @Validated
 @Tag(name = "Работа с отзывами о событиях")
 @Slf4j
+@RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService service;
+
+    private final LikesService likesService;
 
     @PostMapping
     @Operation(description = "Создание нового отзыва")
@@ -70,8 +74,28 @@ public class ReviewController {
     @DeleteMapping("/{id}")
     @Operation(description = "Удаление отзыва")
     void deleteReview(@RequestHeader @Positive long userId,
-                    @PathVariable @Positive long id) {
+                      @PathVariable @Positive long id) {
         service.deleteReview(userId, id);
         log.info("отзыв с id = {} удален", id);
+    }
+
+    @PostMapping("/like/{reviewId}")
+    public void like(@Valid @RequestHeader long userId, @PathVariable @Positive long reviewId) throws Exception {
+        likesService.like(userId, reviewId);
+    }
+
+    @DeleteMapping("/like/{reviewId}")
+    public void deleteLike(@Valid @RequestHeader long userId, @PathVariable @Positive long reviewId) throws Exception {
+        likesService.deleteLike(userId, reviewId);
+    }
+
+    @PostMapping("/dislike/{reviewId}")
+    public void dislike(@Valid @RequestHeader long userId, @PathVariable @Positive long reviewId) throws Exception {
+        likesService.dislike(userId, reviewId);
+    }
+
+    @DeleteMapping("/dislike/{reviewId}")
+    public void deleteDislike(@Valid @RequestHeader long userId, @PathVariable @Positive long reviewId) throws Exception {
+        likesService.deleteDislike(userId, reviewId);
     }
 }
