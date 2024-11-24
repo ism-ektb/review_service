@@ -5,13 +5,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.yandex.review_service.exception.exception.BaseRelationshipException;
 import ru.yandex.review_service.exception.exception.NoFoundObjectException;
-import ru.yandex.review_service.mapper.LikesMapper;
 import ru.yandex.review_service.mapper.ReviewListMapper;
 import ru.yandex.review_service.mapper.ReviewMapper;
 import ru.yandex.review_service.mapper.ReviewPatcher;
 import ru.yandex.review_service.model.*;
 import ru.yandex.review_service.repository.ReviewRepository;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -32,6 +32,8 @@ public class ReviewServiceImpl implements ReviewService{
     public ReviewFullOutDto create(Long userId, ReviewInDto reviewInDto) {
         Review review = mapper.dtoToModel(reviewInDto);
         review.setAuthorId(userId);
+        review.setLikes(new HashSet<>());
+        review.setDislikes(new HashSet<>());
         return mapper.modelToFullDto(repository.save(review));
     }
 

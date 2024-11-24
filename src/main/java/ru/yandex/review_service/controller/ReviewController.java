@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -80,6 +79,7 @@ public class ReviewController {
     }
 
     @PostMapping("/like/{reviewId}")
+    @ResponseStatus(HttpStatus.OK)
     public void like(@Valid @RequestHeader long userId, @PathVariable @Positive long reviewId) throws Exception {
         likesService.like(userId, reviewId);
     }
