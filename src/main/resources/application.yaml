@@ -7,7 +7,7 @@ spring:
     init:
       mode: never
   datasource:
-    url: jdbc:postgresql://localhost:6542/review?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/review
     driverClassName: org.postgresql.Driver
     username: review
     password: review
@@ -16,5 +16,3 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: false
-
-

@@ -33,4 +33,8 @@ public class ReviewOutDto {
     private Long mark;
     @Schema(name = "id мероприятия на которое дается отзыв")
     private Long eventId;
+    @Schema(name = "Количество лайков")
+    private int likes;
+    @Schema(name = "Количество дизлайков")
+    private int dislikes;
 }

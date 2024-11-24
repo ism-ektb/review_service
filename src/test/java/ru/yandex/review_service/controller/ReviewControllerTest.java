@@ -16,6 +16,7 @@ import ru.yandex.review_service.model.ReviewFullOutDto;
 import ru.yandex.review_service.model.ReviewInDto;
 import ru.yandex.review_service.model.ReviewOutDto;
 import ru.yandex.review_service.model.ReviewPatchDto;
+import ru.yandex.review_service.service.LikesService;
 import ru.yandex.review_service.service.ReviewService;
 
 import java.nio.charset.StandardCharsets;
@@ -35,6 +36,8 @@ class ReviewControllerTest {
     private MockMvc mvc;
     @MockBean
     private ReviewService service;
+    @MockBean
+    private LikesService likesService;
 
     @Test
     @SneakyThrows
@@ -82,6 +85,25 @@ class ReviewControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(StandardCharsets.UTF_8)
                 .param("eventId", "1")).andExpect(status().is(200));
+    }
+
+    @Test
+    void like_goodResult() throws Exception {
+        ReviewOutDto reviewOutDto = ReviewOutDto.builder().id(1L).build();
+        doNothing().when(likesService).like(anyLong(),anyLong());
+        mvc.perform(post("/reviews/like/{reviewId}", 1L)
+                        .header("userId", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+    @Test
+    void dislike_goodResult() throws Exception {
+        ReviewOutDto reviewOutDto = ReviewOutDto.builder().id(1L).build();
+        doNothing().when(likesService).like(anyLong(),anyLong());
+        mvc.perform(post("/reviews/dislike/{reviewId}", 1L)
+                        .header("userId", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
 }
