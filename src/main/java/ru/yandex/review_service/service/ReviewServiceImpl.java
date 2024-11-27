@@ -11,6 +11,7 @@ import ru.yandex.review_service.mapper.ReviewPatcher;
 import ru.yandex.review_service.model.*;
 import ru.yandex.review_service.repository.ReviewRepository;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -31,6 +32,8 @@ public class ReviewServiceImpl implements ReviewService{
     public ReviewFullOutDto create(Long userId, ReviewInDto reviewInDto) {
         Review review = mapper.dtoToModel(reviewInDto);
         review.setAuthorId(userId);
+        review.setLikes(new HashSet<>());
+        review.setDislikes(new HashSet<>());
         return mapper.modelToFullDto(repository.save(review));
     }
 
