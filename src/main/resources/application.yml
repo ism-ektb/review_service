@@ -1,3 +1,5 @@
+server:
+  port: 8084
 spring:
   liquibase:
     enabled: true
@@ -7,10 +9,13 @@ spring:
     init:
       mode: never
   datasource:
-    url: jdbc:postgresql://localhost:6542/review
-    driverClassName: org.postgresql.Driver
-    username: review
-    password: review
+    url: ${SPRING_DATASOURCE_URL}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    username: ${SPRING_DATASOURCE_USERNAME}
+#    url: jdbc:postgresql://localhost:5432/review
+#    driverClassName: org.postgresql.Driver
+#    username: review
+#    password: review
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
