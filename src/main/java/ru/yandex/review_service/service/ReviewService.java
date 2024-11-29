@@ -18,7 +18,7 @@ public interface ReviewService {
      */
     ReviewFullOutDto patch(Long userId, Long reviewId, ReviewPatchDto reviewPatchDto);
     /**
-     * Получить отзыв по Id
+     * Получить отзыв  по Id
      */
     ReviewOutDto getReview(Long reviewId);
     /**
