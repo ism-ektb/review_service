@@ -18,6 +18,8 @@ import ru.yandex.review_service.model.ReviewOutDto;
 import ru.yandex.review_service.model.ReviewPatchDto;
 import ru.yandex.review_service.service.LikesService;
 import ru.yandex.review_service.service.ReviewService;
+import ru.yandex.review_service.service.ReviewServiceImpl;
+import ru.yandex.review_service.service.StatisticsService;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -35,9 +37,10 @@ class ReviewControllerTest {
     @Autowired
     private MockMvc mvc;
     @MockBean
-    private ReviewService service;
+    private ReviewServiceImpl service;
     @MockBean
     private LikesService likesService;
+
 
     @Test
     @SneakyThrows

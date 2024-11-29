@@ -2,22 +2,20 @@ version: '3.1'
 services:
 
   review_service-db:
-    image: postgres:latest
+    image: postgres:13.7-alpine
     container_name: review_service-db
     volumes:
       - /var/lib/postgresql/data/
-    ports:
-      - "6542:5432"
     environment:
       - POSTGRES_DB=review
       - POSTGRES_USER=review
       - POSTGRES_PASSWORD=review
 
-  user_service:
-    build: \
+  review_service:
+    build: .
     container_name: review_service
     ports:
-      - "8080:8080"
+      - "8084:8084"
     depends_on:
       - review_service-db
     environment:

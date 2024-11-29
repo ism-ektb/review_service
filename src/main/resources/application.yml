@@ -1,0 +1,23 @@
+server:
+  port: 8084
+spring:
+  liquibase:
+    enabled: true
+  application:
+    name: review_service
+  sql:
+    init:
+      mode: never
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    username: ${SPRING_DATASOURCE_USERNAME}
+#    url: jdbc:postgresql://localhost:5432/review
+#    driverClassName: org.postgresql.Driver
+#    username: review
+#    password: review
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: false
