@@ -21,7 +21,7 @@ public class ReviewOutDto {
     private String username;
     @Schema(name = "Название отзыва")
     private String title;
-    @Schema(name = "Текст отзыва")
+    @Schema(name = "Текст о тзыва")
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(name = "Двта сознания отзыва", example = "2022-06-16 16:37:23")

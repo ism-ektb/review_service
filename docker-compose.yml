@@ -6,15 +6,13 @@ services:
     container_name: review_service-db
     volumes:
       - /var/lib/postgresql/data/
-    ports:
-      - "6542:5432"
     environment:
       - POSTGRES_DB=review
       - POSTGRES_USER=review
       - POSTGRES_PASSWORD=review
 
   user_service:
-    build: \
+    build: .
     container_name: review_service
     ports:
       - "8080:8080"
