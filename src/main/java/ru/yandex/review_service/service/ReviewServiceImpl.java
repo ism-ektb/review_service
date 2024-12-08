@@ -1,11 +1,19 @@
 package ru.yandex.review_service.service;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.yandex.review_service.client.EventClient;
+import ru.yandex.review_service.client.RegistrationClient;
 import ru.yandex.review_service.dto.StatisticsResponse;
 import ru.yandex.review_service.dto.TopReviewResponse;
+import ru.yandex.review_service.dto.external.EventDto;
+import ru.yandex.review_service.dto.external.registration.RegistrationResponseGetStates;
+import ru.yandex.review_service.dto.external.registration.RegistrationState;
 import ru.yandex.review_service.exception.exception.BaseRelationshipException;
+import ru.yandex.review_service.exception.exception.ConflictException;
 import ru.yandex.review_service.exception.exception.NoFoundObjectException;
 import ru.yandex.review_service.mapper.ReviewListMapper;
 import ru.yandex.review_service.mapper.ReviewMapper;
@@ -14,12 +22,9 @@ import ru.yandex.review_service.model.*;
 import ru.yandex.review_service.repository.ReviewRepository;
 
 
-import java.util.HashSet;
-
-import java.util.ArrayList;
-
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +34,10 @@ public class ReviewServiceImpl implements ReviewService, StatisticsService {
     private final ReviewMapper mapper;
     private final ReviewListMapper listMapper;
     private final ReviewPatcher patcher;
+    @Autowired
+    private final EventClient eventClient;
+    @Autowired
+    private final RegistrationClient registrationClient;
     /**
      * Создание отзыва
      *
@@ -37,6 +46,38 @@ public class ReviewServiceImpl implements ReviewService, StatisticsService {
      */
     @Override
     public ReviewFullOutDto create(Long userId, ReviewInDto reviewInDto) {
+        try {
+            EventDto eventDto = eventClient.getById(userId, reviewInDto.getEventId());
+            if (LocalDateTime.parse(eventDto.getEndDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                    .isAfter(LocalDateTime.now())) {
+                throw new ConflictException("Нельзя оставить отзыв на не закончившееся мероприятие с id=" +
+                        reviewInDto.getEventId());
+            }
+        } catch (FeignException e) {
+            if (e.status() == 404) {
+                throw new NoFoundObjectException(String.format("Событие с id=%s не найдено", reviewInDto.getEventId()));
+            }
+        }
+        try {
+            List<RegistrationResponseGetStates> registrations = registrationClient.getWithStates(userId,
+                    Collections.singletonList(RegistrationState.APPROVED),
+                    reviewInDto.getEventId());
+            boolean flag = false;
+            for (RegistrationResponseGetStates registration : registrations) {
+                if (registration.getUsername().equals(reviewInDto.getUsername())) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                throw new ConflictException("Пользователь с именем " + reviewInDto.getUsername() + " не участвовал в" +
+                        " событии с id=" + reviewInDto.getEventId() + " поэтому не может оставить отзыв");
+            }
+        } catch (FeignException e) {
+            if (e.status() == 500) {
+                throw new RuntimeException("Registrations not found on event with id=" + reviewInDto.getEventId());
+            }
+        }
         Review review = mapper.dtoToModel(reviewInDto);
         review.setAuthorId(userId);
         review.setLikes(new HashSet<>());

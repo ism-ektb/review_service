@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.yandex.review_service.exception.exception.BaseRelationshipException;
+import ru.yandex.review_service.exception.exception.ConflictException;
 import ru.yandex.review_service.exception.exception.NoFoundObjectException;
 
 import java.util.List;
@@ -37,6 +38,13 @@ public class ErrorHandler {
     public ErrorResponse onNoFoundObjectException(NoFoundObjectException e) {
         log.warn("The required object was not found. {}", e.getMessage());
         return new ErrorResponse(List.of(new Error("The required object was not found.", e.getMessage())));
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public ErrorResponse handleConflictException(ConflictException e) {
+        log.warn("Получен статус 409 CONFLICT {}", e.getMessage(), e);
+        return new ErrorResponse(List.of(new Error("Data in conflict", e.getMessage())));
     }
 
     @ExceptionHandler(BaseRelationshipException.class)
