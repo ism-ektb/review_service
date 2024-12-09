@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/create-review-table.sql
+  - include:
+      file: db/changelog/changeset/create-new-review.sql
+  - include:
+      file: db/changelog/changeset/create-likes-table.sql
+  - include:
+      file: db/changelog/changeset/create-dislikes-table.sql

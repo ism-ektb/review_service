@@ -14,7 +14,7 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
 #    url: jdbc:postgresql://localhost:5432/review
 #    driverClassName: org.postgresql.Driver
-#    username: review
+#   username: review
 #    password: review
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
